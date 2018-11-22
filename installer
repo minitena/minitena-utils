@@ -1,0 +1,31 @@
+#!/bin/bash
+
+VERSION="current"
+
+list_kmap() {
+	LISTKMAP="$(find /usr/share/kbd/keymaps/ -type f -iname "*.map.gz" -printf "%f\n" | sed 's|.map.gz||g' | sort)"
+	echo "Available keyboard layouts: "
+	echo "$LISTKMAP" | less
+}
+
+setup_kmap() {
+	read -p "What keyboard layout you will use? [type 'list' to list for keymaps] " -r IKEYMAP
+
+	case $IKEYMAP in
+		list)
+			list_kmap
+			;;
+		*)
+			export KMAP="$IKEYMAP"
+			;;
+	esac
+
+	if [ -z "$KMAP" ]; then
+		export KMAP="us"
+	fi
+}
+
+setup_kmap
+
+exit 0
+
